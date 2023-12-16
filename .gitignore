@@ -18,3 +18,4 @@ application/logs/*
 /vendor/
 application/config/config.php
 application/config/database.php
+.vscode/sftp.json
