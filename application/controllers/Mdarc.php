@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 * https://www.itsolutionstuff.com/post/stripe-payment-gateway-integration-in-codeigniter-exampleexample.html
 */
 
-class StripeController extends CI_Controller {
+class Mdarc extends CI_Controller {
 
     /**
      * Get All Data from this method.
@@ -28,6 +28,10 @@ class StripeController extends CI_Controller {
         $this->load->view('mdarc_view');
     }
 
+	public function about() {
+		$this->load->view('readme');
+	}
+
     /**
      * Get All Data from this method.
      * @return Response
@@ -35,7 +39,7 @@ class StripeController extends CI_Controller {
     public function stripePost() {
 		try {
 			require_once('application/libraries/stripe-php/init.php');
-			\Stripe\Stripe::setApiKey($this->config->item('stripe_secret'));
+			\Stripe\Stripe::setApiKey($this->config->item('mdarc_secret'));
 			\Stripe\Customer::create([
 				"description" => "the first customer",
 			]);
@@ -43,7 +47,7 @@ class StripeController extends CI_Controller {
 					"amount" => 100 * 100,
 					"currency" => "usd",
 					"source" => $this->input->post('stripeToken'),
-					"description" => "Test payment from JLK Consulting" 
+					"description" => "Standalone gtwy test for MDARC" 
 			]);
 			$this->session->set_flashdata('success', 'Payment made successfully.');
 			redirect(base_url() . 'index.php/my-stripe', 'refresh');

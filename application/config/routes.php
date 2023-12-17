@@ -56,3 +56,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['my-stripe'] = "StripeController";
 $route['stripePost']['post'] = "StripeController/stripePost";
+
+$route['mdarc'] = "Mdarc";
+$route['mdarc-post']['post'] = "mdarc/stripePost";
+
+$route['about'] = 'Mdarc/about';
