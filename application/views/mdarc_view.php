@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CI 3 Payments Testing</title>
+    <title>MDARC Payments</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style type="text/css">
@@ -60,30 +60,46 @@
 					
                         <div class='form-row row'>
                             <div class='col-xs-12 form-group required'>
-                                <label class='control-label'>Name on Card</label> <input class='form-control' size='4' type='text'>
+                                <label class='control-label'>Name on Card</label> 
+                                <input class='form-control' size='4' type='text' id="cc_name" name="cc_name" >
                             </div>
                         </div>
 
 						<div class='form-row row'>
-                            <div class='col-xs-12 form-group'>
-                                <label class='control-label'>Street Address</label> <input class='form-control' size='4' type='text'>
+                            <div class='col-xs-8 form-group'>
+                                <label class='control-label'>MDARC Email</label> 
+                                <input class='form-control' size='4' type='text' id="email" name="email">
+                            </div>
+                        </div>
+						<div class='row'>
+                            <div class='col-xs-12'>
+                                <hr>
                             </div>
                         </div>
 
-						<div class='form-row row'>
-                            <div class='col-xs-12 col-md-4 form-group'>
-                                <label class='control-label'>City</label> <input class='form-control' size='18' type='text'>
+                        <div class='form-row row'>
+                            <div class='col-xs-4 form-group'>
+                                <label class='control-label'>Membership</label> 
+                                <input type="checkbox" id="mem" name="mem" value="mem" onclick="set_pay()" checked>
+                                <input class='form-control' size='4' type='text' id="memamount" name="memamount" value="$45.00" disabled>
                             </div>
-
-                            <div class='col-xs-12 col-md-4 form-group'>
-                                <label class='control-label'>State</label> <input class='form-control' size='2' type='text'>
+                            <div class='col-xs-4 form-group'>
+                                <label class='control-label'>The Carrier ($18.00)</label> 
+                                <input type="checkbox" id="carrier" name="carrier" value="carrier" onclick="set_pay()">
+                                <input class='form-control' size='4' type='text' id="carramnt" name="carramnt" value="$0.00" disabled>
                             </div>
-
-                            <div class='col-xs-12 col-md-4 form-group'>
-                                <label class='control-label address-zip'>Zip</label> <input class='form-control' size='5' type='text'>
+                            <div class='col-xs-4 form-group'>
+                                <label class='control-label'>Donation</label> 
+                                <input type="checkbox" id="donation" name="donation" value="donation" onclick="set_pay()" disabled>
+                                <input class='form-control' size='4' type='text' id="donamnt" name="donamnt" value="$0.00" onclick="en_check()">
                             </div>
                         </div>
-
+                        <div class='row'>
+                            <div class='col-xs-2'>&nbsp;</div>
+                            <div class='col-xs-10'>(The $18.00 is for The Carrier hardcopy via USPS)</div>
+                            <input type='hidden' id='proc_total' name='proc_total' value = '45'>
+                        </div>
+                        <div class="row">&nbsp;</div>
                         <div class='form-row row'>
                             <div class='col-xs-12 form-group card required'>
                                 <label class='control-label'>Card Number</label> <input autocomplete='off' class='form-control card-number' size='20' type='text'>
@@ -108,11 +124,13 @@
                                 <div class='alert-danger alert'>Please correct the errors and try again.</div>
                             </div>
                         </div>
+                        <div class="row">&nbsp;</div>
                         <div class="row">
                             <div class="col-xs-12">
-                                <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($100)</button>
+                                <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now <span id="tot_btn">$45.00</span></button>
                             </div>
                         </div>
+                        <div class="row">&nbsp;</div>
                     </form>
                 </div>
             </div> 
@@ -157,6 +175,62 @@
 </body> 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">
+
+function set_pay() {
+    var memb = 0;
+    var carr = 0;
+    var tot = 0;
+    var don = 0;
+    if(document.getElementById("mem").checked == true) {
+        document.getElementById("memamount").defaultValue = "$45.00";
+        memb += 45;
+    }
+    else {
+        document.getElementById("memamount").defaultValue = "$0.00";
+        if(memb > 44)
+            memb -= 45;
+    }
+
+    if(document.getElementById("carrier").checked == true) {
+        document.getElementById("carramnt").defaultValue = "$18.00";
+        carr += 18;
+    }
+    else {
+        document.getElementById("carramnt").defaultValue = "$0.00";
+        if(carr > 17)
+            carr -= 18;
+    }
+
+    if(document.getElementById("donation").checked == true) {
+        var donStr = document.getElementById("donamnt").value;
+        var dolSign = donStr.substring(0, 1);
+        if(dolSign == "$")  {
+            don = donStr.substring(1, donStr.length - 1);
+        }
+        else {
+            don = donStr;
+        }
+        if(parseFloat(don) < 5) {
+            alert("Donation must be at least $5.00");
+            document.getElementById("donation").checked = false;
+            document.getElementById("donamnt").defaultValue = "$0.00";
+            don = 0;
+        }
+    }
+
+    if(document.getElementById("donation").checked == false) {
+        document.getElementById("donamnt").defaultValue = "$0.00";
+        don = 0;
+    }
+
+    tot = memb + carr + parseFloat(don);
+    document.getElementById("tot_btn").textContent="$" + tot.toFixed(2);
+    document.getElementById("proc_total").value = tot;
+}
+
+function en_check() {
+    document.getElementById("donation").disabled = false;
+}
 
 $(function() {
 	var $form = $(".require-validation");

@@ -37,6 +37,7 @@ class Mdarc extends CI_Controller {
      * @return Response
     */
     public function stripePost() {
+		$totalSum = floatval($this->input->post('proc_total'));
 		try {
 			require_once('application/libraries/stripe-php/init.php');
 			\Stripe\Stripe::setApiKey($this->config->item('mdarc_secret'));
@@ -44,13 +45,14 @@ class Mdarc extends CI_Controller {
 				"description" => "the first customer",
 			]);
 			\Stripe\Charge::create ([
-					"amount" => 100 * 100,
+					"amount" => $totalSum * 100,
 					"currency" => "usd",
 					"source" => $this->input->post('stripeToken'),
 					"description" => "Standalone gtwy test for MDARC" 
 			]);
-			$this->session->set_flashdata('success', 'Payment made successfully.');
-			redirect(base_url() . 'index.php/my-stripe', 'refresh');
+			$this->session->set_flashdata('success', 'Payment $' . number_format($totalSum, 2) . ' made successfully.');
+			//redirect(base_url() . 'index.php/mdarc', 'refresh');
+			header("Location: " . base_url() . "index.php/mdarc");
 		}
 		catch (\Stripe\Exception\CardException $e) {
 			  // Since it's a decline, \Stripe\Exception\CardException will be caught

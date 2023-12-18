@@ -7,7 +7,7 @@ This program is intended to process payments for MDARC (Mount Diablo Diablo Amat
 ### Pacificon Ham Radio Convention
 MDARC is hosting annual Pacificon Ham Radio Convention and Pay-v1 is also intended to process admission and vendor fees for the event
 ### Technology
-It is a web application written in PHP using CodeIgniter 3 PHP framework with MySQL database on the back end.
+It is a web application written in PHP using CodeIgniter 3 PHP framework with MySQL database on the back end. The URL is https://pay-v1b.jlkconsulting.info/index.php/mdarc
 ### Concept
 The program is used as a component of other MDARC web portals such as the Membership Portal https://mdarc.jlkconsulting.info, main MDARC website at https://mdarc.org and Pacificon website at https://pacificon.org 
 ### Main Component
