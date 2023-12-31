@@ -9,7 +9,7 @@ MDARC is hosting annual Pacificon Ham Radio Convention and Pay-v1 is also intend
 ### Technology
 It is a web application written in PHP using CodeIgniter 3 PHP framework with MySQL database on the back end. The URL is https://pay-v1b.jlkconsulting.info/index.php/mdarc
 ### Concept
-The program is used as a component of other MDARC web portals such as the Membership Portal https://mdarc.jlkconsulting.info, main MDARC website at https://mdarc.org and Pacificon website at https://pacificon.org 
+The program is intended to be used as a component of other MDARC web portals such as the Membership Portal https://mdarc.jlkconsulting.info, main MDARC website at https://mdarc.org and Pacificon website at https://pacificon.org 
 ### Main Component
 Program is inspired by https://www.itsolutionstuff.com/post/stripe-payment-gateway-integration-in-codeigniter-exampleexample.html
 Main component is Stripe PHP library downloaded from https://github.com/stripe/stripe-php
