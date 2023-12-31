@@ -11,7 +11,7 @@
         <div class="container">
             <div class="row mt-5">
                 <div class="col-sm-10 offset-sm-1">
-                    <h2>About Pay-v1</h2>
+                    <h2>About Pay-v1b</h2>
                     <p>This program is intended to process payments for MDARC (Mount Diablo Diablo Amateur Radio Club) via major credit cards. MDARC is a non-profit organization. There are several types of payments that are processed by the Pay-v1 program:</p>
                     <ul>
                         <li class="has-line-data" data-line-start="2" data-line-end="3">Membership fees</li>

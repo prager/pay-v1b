@@ -32,6 +32,10 @@ class Mdarc extends CI_Controller {
 		$this->load->view('readme');
 	}
 
+	public function terms() {
+		$this->load->view('terms');
+	}
+
     /**
      * Get All Data from this method.
      * @return Response

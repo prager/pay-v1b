@@ -61,3 +61,4 @@ $route['mdarc'] = "Mdarc";
 $route['mdarc-post']['post'] = "mdarc/stripePost";
 
 $route['about'] = 'Mdarc/about';
+$route['terms'] = 'Mdarc/terms';
