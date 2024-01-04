@@ -4,7 +4,7 @@
     <title>MDARC Payments</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="shortcut icon" href="<?php echo base_url() ;?>assets/img/mdarc-icon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?php echo base_url() ;?>/assets/img/mdarc-icon.ico" type="image/x-icon" />
     <style type="text/css">
 
         .panel-title {
@@ -28,13 +28,10 @@
     </style>
 </head>
 <body>
-
-<!-- Modals: https://getbootstrap.com/docs/3.3/javascript/#modals -->
-
 <div class="container">
 	<div class="row">
 		<div class="col co-md-offset-3 text-center">
-			<h2>MDARC Membership Payments</h2>
+			<h1>MDARC Payments</h1>
 		</div>
 	</div>
 	<div class="row">
@@ -98,11 +95,11 @@
                                 <input class='form-control' size='4' type='text' id="donamnt" name="donamnt" value="$0.00" onclick="en_check()">
                             </div>
                         </div>
-                        <!--<div class='row'>
+                        <div class='row'>
                             <div class='col-xs-2'>&nbsp;</div>
                             <div class='col-xs-10'>(The $18.00 is for The Carrier hardcopy via USPS)</div>
                             <input type='hidden' id='proc_total' name='proc_total' value = '45'>
-                        </div>-->
+                        </div>
                         <div class="row">&nbsp;</div>
                         <div class='form-row row'>
                             <div class='col-xs-12 form-group card required'>
@@ -167,7 +164,7 @@
             &copy; <a href="https://jlkconsulting.info" target="_blank">JLK Consulting</a>
         </div>
         <div class="col-sm-4 text-right">
-            <a href="https://stripe.com/docs/testing#cards" target="_blank" class="text-decoration-none">Testing Mode</a> | <a href="<?php echo base_url();?>index.php/terms" target="_blank">Terms of Service</a> | <a href="<?php echo base_url();?>index.php/about" target="_blank">About</a>
+            <a href="https://stripe.com/docs/testing#cards" target="_blank" class="text-decoration-none">Testing Mode</a> | <a href="<?php echo base_url();?>index.php/about" target="_blank">About</a>
         </div>
     </div>
     <div class="row" style="height: 60px; ">
@@ -175,10 +172,8 @@
             &nbsp;
         </div>
     </div>
-
 </div>
 </body> 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">
 
@@ -210,8 +205,8 @@ function set_pay() {
     if(document.getElementById("donation").checked == true) {
         var donStr = document.getElementById("donamnt").value;
         var dolSign = donStr.substring(0, 1);
-        if(dolSign == "$")  {            
-            don = donStr.slice(1);
+        if(dolSign == "$")  {
+            don = donStr.substring(1, donStr.length - 1);
         }
         else {
             don = donStr;
@@ -222,13 +217,9 @@ function set_pay() {
             document.getElementById("donamnt").defaultValue = "$0.00";
             don = 0;
         }
-        else {
-            document.getElementById("donamnt").disabled = true;
-        }
     }
 
     if(document.getElementById("donation").checked == false) {
-        document.getElementById("donamnt").disabled = false;
         document.getElementById("donamnt").defaultValue = "$0.00";
         don = 0;
     }

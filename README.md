@@ -13,7 +13,7 @@ The program is intended to be used as a component of other MDARC web portals suc
 ### Main Component
 Program is inspired by https://www.itsolutionstuff.com/post/stripe-payment-gateway-integration-in-codeigniter-exampleexample.html
 Main component is Stripe PHP library downloaded from https://github.com/stripe/stripe-php
-## CodeIgniter Framework - What is CodeIgniter
+## CodeIgniter 3 Framework - What is CodeIgniter
 CodeIgniter is an Application Development Framework - a toolkit - for people
 who build web sites using PHP. Its goal is to enable you to develop projects
 much faster than you could if you were writing code from scratch, by providing
