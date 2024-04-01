@@ -16,7 +16,6 @@
                     <ul>
                         <li class="has-line-data" data-line-start="2" data-line-end="3">Membership fees</li>
                         <li class="has-line-data" data-line-start="3" data-line-end="4">Repeater donations</li>
-                        <li class="has-line-data" data-line-start="4" data-line-end="5">Club donations</li>
                         <li class="has-line-data" data-line-start="5" data-line-end="6">Processing charge for hard copy of The Carrier newsletter</li>
                     </ul>
                     <h3>Pacificon Ham Radio Convention</h3>

@@ -4,6 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /*  
 * Inspired by:
 * https://www.itsolutionstuff.com/post/stripe-payment-gateway-integration-in-codeigniter-exampleexample.html
+*
+* Search for: Stripe Payment Gateway Integration in CodeIgniter
 */
 
 class Mdarc extends CI_Controller {
@@ -25,11 +27,20 @@ class Mdarc extends CI_Controller {
      * @return Response
     */
     public function index() {
-        $this->load->view('mdarc_view');
+		$paydata = $this->Manager_model->get_paydata();
+		$data['membership'] = $paydata['membership'];
+		$data['carrier'] = $paydata['carrier'];
+		$data['val_msg'] = '';
+        $this->load->view('mdarc_view', $data);
+		//$this->load->view('my_stripe');
     }
 
 	public function about() {
 		$this->load->view('readme');
+	}
+
+	public function terms() {
+		$this->load->view('terms');
 	}
 
     /**
@@ -37,57 +48,144 @@ class Mdarc extends CI_Controller {
      * @return Response
     */
     public function stripePost() {
+		$emailPost = $this->input->post('email');
+		$namePost = $this->input->post('cc_name');
 		$totalSum = floatval($this->input->post('proc_total'));
-		try {
-			require_once('application/libraries/stripe-php/init.php');
-			\Stripe\Stripe::setApiKey($this->config->item('mdarc_secret'));
-			\Stripe\Customer::create([
-				"description" => "the first customer",
-			]);
-			\Stripe\Charge::create ([
-					"amount" => $totalSum * 100,
-					"currency" => "usd",
-					"source" => $this->input->post('stripeToken'),
-					"description" => "Standalone gtwy test for MDARC" 
-			]);
-			$this->session->set_flashdata('success', 'Payment $' . number_format($totalSum, 2) . ' made successfully.');
-			//redirect(base_url() . 'index.php/mdarc', 'refresh');
-			header("Location: " . base_url() . "index.php/mdarc");
+		$student = $this->input->post('student');
+
+		$frmFlag = false;
+		$nameErr = '';
+		$emailErr = '';
+		$studentErr = '';
+		
+		if (empty($namePost)) {
+			$nameErr = "Name is required!";
+			$frmFlag = true;
+		} else {
+		// check if name only contains letters and whitespace
+		if (!preg_match("/^[a-zA-Z-' ]*$/",$namePost)) {
+			$nameErr = "Name is not valid!";
+			$frmFlag = true;
+			}
 		}
-		catch (\Stripe\Exception\CardException $e) {
-			  // Since it's a decline, \Stripe\Exception\CardException will be caught
-			echo "Status is: " . $e->getHttpStatus() . "<br />";
-			echo 'Type is: ' . $e->getError()->type . '<br />';
-			echo 'Code is: ' . $e->getError()->code . '<br />';
-			// param is '' in this case
-			echo 'Param is: ' . $e->getError()->param . '<br />';
-			echo 'Message is: ' . $e->getError()->message . '<br />';
-		} 
-		catch (\Stripe\Exception\RateLimitException $e) {
-			// Too many requests made to the API too quickly
-			echo 'Too many requests!';
-		} 
-		catch (\Stripe\Exception\InvalidRequestException $e) {
-			// Invalid parameters were supplied to Stripe's API
-			echo 'Invalid parameters sent!';
-		} 
-		catch (\Stripe\Exception\AuthenticationException $e) {
-			// Authentication with Stripe's API failed
-			// (maybe you changed API keys recently)
-			echo 'Authentication error!';
-		} 
-		catch (\Stripe\Exception\ApiConnectionException $e) {
-			// Network communication with Stripe failed
-			echo 'Network connection failed!';
-		} 
-		catch (\Stripe\Exception\ApiErrorException $e) {
-			// Display a very generic error to the user, and maybe send
-			// yourself an email
-			echo 'Very generic error. Who knows what is this!';
-		} 
-		catch (Exception $e) {
-			// Something else happened, completely unrelated to Stripe
-			echo 'An error that is completely unrelated to Stripe.';
+
+		if($student == 'studentval' && $this->Manager_model->check_student($emailPost)) {
+			$studentErr = 'Unfortunately, you are not registered for student discount with MDARC.';
+			$frmFlag = true;
 		}
+
+		if (empty($emailPost)) {
+			$emailErr = "Email is required!";
+			$frmFlag = true;
+		} 
+		else {
+			// check if e-mail address is well-formed
+			if (!filter_var($emailPost, FILTER_VALIDATE_EMAIL)) {
+				$emailErr = "Invalid email!";
+				$frmFlag = true;
+			}
+			else if(!$this->Manager_model->check_email($emailPost)){
+				$emailErr = "Email is not on file!";
+				$frmFlag = true;
+			}
+		}
+
+		if($frmFlag){
+			$paydata = $this->Manager_model->get_paydata();
+			$data['membership'] = $paydata['membership'];
+			$data['carrier'] = $paydata['carrier'];
+			$data['val_msg'] = $studentErr . ' ' . $nameErr . ' ' . $emailErr . ' Please, try again...';
+			$this->load->view('mdarc_view', $data);
+		}
+		else {
+			$param['email'] = $emailPost;
+			$param['name'] = $namePost;
+			$param['total'] = $totalSum;
+			$param['membership'] = $this->input->post('mem');
+			$param['carrier'] = $this->input->post('carrier');
+			$param['donation'] = $this->input->post('donation');
+			$param['student'] = $student;
+			
+				try {
+					require_once('application/libraries/stripe-php/init.php');
+					\Stripe\Stripe::setApiKey($this->config->item('mdarc_secret'));
+					\Stripe\Customer::create([
+						"description" => "MDARC Member or donor",
+						"name" => $namePost,
+						"email" => $emailPost,
+					]);
+					\Stripe\Charge::create ([
+							"amount" => $totalSum * 100,
+							"currency" => "usd",
+							"source" => $this->input->post('stripeToken'),
+							"description" => "Payment by: " . $namePost . " via SA",
+					]);
+
+					$this->Manager_model->process_payment($param);
+
+					$this->session->set_flashdata('success', 'Payment of $' . number_format((float)floatval($this->input->post('proc_total')), 2, '.', '') .  ' made successfully.');
+					//redirect(base_url() . 'index.php/mdarc', 'refresh');
+					header("Location: " . base_url() . "index.php/mdarc");
+
+				}
+				catch (\Stripe\Exception\CardException $e) {
+					// Since it's a decline, \Stripe\Exception\CardException will be caught
+					$stat = "Status is: " . $e->getHttpStatus() . "<br />";
+					$type = 'Type is: ' . $e->getError()->type . '<br />';
+					$code = 'Code is: ' . $e->getError()->code . '<br />';
+					// param is '' in this case
+					$param = 'Param is: ' . $e->getError()->param . '<br />';
+					$msg = 'Message is: ' . $e->getError()->message . '<br />';
+					//echo $msg;
+					$paydata = $this->Manager_model->get_paydata();
+					$data['membership'] = $paydata['membership'];
+					$data['carrier'] = $paydata['carrier'];
+					$data['val_msg'] = $msg;
+					$this->load->view('mdarc_view', $data);
+					//$this->load->view('mdarc_view', array('val_msg' => $stat . $type . $code . $param . $msg . '<br />' .  ' Please, try again...'));
+				} 
+				catch (\Stripe\Exception\RateLimitException $e) {
+					// Too many requests made to the API too quickly
+					$msg = 'Too many requests!';
+					echo $msg;
+					//$this->load->view('mdarc_view', array('val_msg' => $msg . ' Please, try again...'));
+				} 
+				catch (\Stripe\Exception\InvalidRequestException $e) {
+					// Invalid parameters were supplied to Stripe's API
+					$paydata = $this->Manager_model->get_paydata();
+					$data['membership'] = $paydata['membership'];
+					$data['carrier'] = $paydata['carrier'];
+					$data['val_msg'] = 'Payment data not correct! Please, try again...';
+					$this->load->view('mdarc_view', $data);
+				} 
+				catch (\Stripe\Exception\AuthenticationException $e) {
+					// Authentication with Stripe's API failed
+					// (maybe you changed API keys recently)
+					$msg =  'Authentication error!';
+					echo $msg;
+					//$this->load->view('mdarc_view', array('val_msg' => $msg . ' Please, try again...'));
+				} 
+				catch (\Stripe\Exception\ApiConnectionException $e) {
+					// Network communication with Stripe failed
+					$msg =  'Network connection failed!';
+					echo $msg;
+					//$this->load->view('mdarc_view', array('val_msg' => $msg . ' Please, try again...'));
+				} 
+				catch (\Stripe\Exception\ApiErrorException $e) {
+					// Display a very generic error to the user, and maybe send
+					// yourself an email
+					$msg =  'Very generic error. Who knows what is this!';
+					echo $msg;
+					//$this->load->view('mdarc_view', array('val_msg' => $msg . ' Please, try again...'));
+				} 
+				catch (Exception $e) {
+					// Something else happened, completely unrelated to Stripe
+					$msg =  'An error that is completely unrelated to Stripe.';
+					echo $msg;
+					//$this->load->view('mdarc_view', array('val_msg' => $msg . ' Please, try again...'));
+				}
+			
+		}
+		
 	}
 }
