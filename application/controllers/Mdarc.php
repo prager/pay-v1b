@@ -43,6 +43,26 @@ class Mdarc extends CI_Controller {
 		$this->load->view('terms');
 	}
 
+	public function paym_ok() {
+
+		// $param['email'] = $emailPost;
+		// $param['name'] = $namePost;
+		// $param['total'] = $totalSum;
+		// $param['membership'] = $this->input->post('mem');
+		// $param['carrier'] = 18;
+		// $param['donation'] = 20.05;
+
+		$data['mem_amount'] = 45;
+		$data['carr_amount'] = 18;
+		$data['don_amount'] = 5;
+		$data['total'] = 68;
+		$data['cur_yr'] = 2025;
+		$data['time_stamp'] = time() - (3 * 3600);
+
+		$data['mem'] = $this->Manager_model->get_member('leho@email.com');
+		$this->load->view('paymok_view', $data);
+	}
+
     /**
      * Get All Data from this method.
      * @return Response
@@ -121,11 +141,15 @@ class Mdarc extends CI_Controller {
 							"description" => "Payment by: " . $namePost . " via SA",
 					]);
 
-					$this->Manager_model->process_payment($param);
+					$retarr = $this->Manager_model->process_payment($param);
 
-					$this->session->set_flashdata('success', 'Payment of $' . number_format((float)floatval($this->input->post('proc_total')), 2, '.', '') .  ' made successfully.');
-					//redirect(base_url() . 'index.php/mdarc', 'refresh');
-					header("Location: " . base_url() . "index.php/mdarc");
+					// if(($retarr['pay_type'] == 1) || ($retarr['pay_type'] == 16)) $flash_msg = 'Payment of $' . number_format((float)floatval($this->input->post('proc_total')), 2, '.', '') . ' including membership fee for the year of ' . $retarr['cur_yr'] . ' made successfully.';
+					// else $flash_msg = 'Payment of $' . number_format((float)floatval($this->input->post('proc_total')), 2, '.', '') . ' made successfully.';
+
+					// $this->session->set_flashdata('success', $flash_msg);
+					// header("Location: " . base_url() . "index.php/mdarc");
+
+					$this->load->view('paymok_view.php', $retarr);
 
 				}
 				catch (\Stripe\Exception\CardException $e) {
