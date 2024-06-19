@@ -26,7 +26,7 @@
       </div>
       <div class="row mt-3">
             <div class="col-lg-8 offset-lg-2">
-              Payment made on: <?php echo date('F j, Y, g:i a', $time_stamp); ?><br /><br />
+              Payment made on: <?php echo date('F j, Y  g:i a', $time_stamp); ?><br /><br />
               MDARC Members's name and callsign: <?php echo $mem['fname'] . ' ' . $mem['lname'] . ' ' . $mem['callsign']; ?><br /><br />
               Membership amount: <?php echo '$' . number_format($mem_amount, 2, '.', ',') . ' (current year - ' . $cur_yr . ' )'; ?><br /><br />
               Donation amount: <?php echo '$' . number_format($don_amount, 2, '.', ','); ?><br /><br />

@@ -51,7 +51,7 @@ function set_pay(memb, carr) {
     document.getElementById("don_val").value = don;
     document.getElementById("mem_val").value = memb;
     document.getElementById("car_val").value = carr;
-    document.getElementById("tot_btn").textContent="$" + tot.toFixed(2);
+    document.getElementById("tot_btn").textContent = "$" + tot.toFixed(2);
 
 }
 

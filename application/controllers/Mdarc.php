@@ -123,9 +123,15 @@ class Mdarc extends CI_Controller {
 			$param['total'] = $totalSum;
 			$param['membership'] = $this->input->post('mem');
 			$param['carrier'] = $this->input->post('carrier');
-			$param['donation'] = $this->input->post('donation');
-			$param['student'] = $student;
+			$don_checked = $this->input->post('donation');
+			if($this->input->post('donation') == 'donation') {
+				$param['donation'] = $this->input->post('donamnt');
+			}
+			else {
+				$param['donation'] = 0;
+			}
 			
+			$param['student'] = $student; 
 				try {
 					require_once('application/libraries/stripe-php/init.php');
 					\Stripe\Stripe::setApiKey($this->config->item('mdarc_secret'));
@@ -140,7 +146,7 @@ class Mdarc extends CI_Controller {
 							"source" => $this->input->post('stripeToken'),
 							"description" => "Payment by: " . $namePost . " via SA",
 					]);
-
+					//echo 'don in contrl: ' . $param['donation'] . '<br>';
 					$retarr = $this->Manager_model->process_payment($param);
 
 					// if(($retarr['pay_type'] == 1) || ($retarr['pay_type'] == 16)) $flash_msg = 'Payment of $' . number_format((float)floatval($this->input->post('proc_total')), 2, '.', '') . ' including membership fee for the year of ' . $retarr['cur_yr'] . ' made successfully.';

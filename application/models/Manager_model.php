@@ -91,8 +91,11 @@ class Manager_model extends CI_Model {
                 
             }
 
-            if($param['donation'] == 'donation') {
-                $don_paid = $param['total'] - ($mem_paid + $paydata['carrier']);
+            //echo 'don in model - before if: ' . $param['donation'] . '<br>';
+            if(intval($param['donation']) > 0) {
+                //$don_paid = $param['total'] - ($mem_paid + $paydata['carrier']);
+                $don_paid = $param['donation'];
+                //echo 'don in model - in if: ' . $don_paid . '<br>';
                 $dbdata = array(
                     'id_member' => $mem_arr['id_members'],
                     'id_payaction' => 5,
