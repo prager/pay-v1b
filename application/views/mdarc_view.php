@@ -93,7 +93,7 @@
                                 <input class='form-control' size='4' type='text' id="carramnt" name="carramnt" value="$0.00" disabled>
                             </div>
                             <div class='col-xs-4 form-group'>
-                                <label class='control-label'>Repeater Donation</label> 
+                                <label class='control-label'>Donation</label> 
                                 <input type="checkbox" id="donation" name="donation" value="donation" onclick="set_pay(45, <?php echo $carrier; ?>)" disabled>
                                 <input class='form-control' size='4' type='text' id="donamnt" name="donamnt" value="$0.00" onclick="en_check()" onfocus="this.select();">
                             </div>
