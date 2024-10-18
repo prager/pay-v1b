@@ -37,6 +37,16 @@ class Manager_model extends CI_Model {
             $carr_paid = 0;
             $mem_paid = 0;
             $don_paid = 0;
+            $don_rep_paid = 0;
+            $total_fee = number_format($param['total'] * $paydata['trans_per'] + $paydata['trans_fee'], 2);
+
+            $trans_arr = array('id_member' => $mem_arr['id_members'], 'total_amt' => $param['total'], 'fee_amt' => $total_fee, 'date' => $time_stamp);
+            $this->db->insert('transactions', $trans_arr);
+
+            $this->db->select_max('id_transactions');
+            $last_trans = $this->db->get('transactions')->row()->id_transactions;
+
+
             if($param['carrier'] == 'carrier') {
                 $dbdata = array(
                     'id_member' => $mem_arr['id_members'],
@@ -47,7 +57,8 @@ class Manager_model extends CI_Model {
                     'result' => 'success',
                     'val_string' => $valstr,
                     'flag' => 0,
-                    'for_year' => $cur_yr
+                    'for_year' => $cur_yr,
+                    'id_transaction' => $last_trans
                 );
                 $this->db->insert('mem_payments', $dbdata);
                 $carr_paid = $paydata['carrier'];
@@ -76,7 +87,8 @@ class Manager_model extends CI_Model {
                     'result' => 'success',
                     'val_string' => $valstr,
                     'flag' => 0,
-                    'for_year' => $cur_yr
+                    'for_year' => $cur_yr,
+                    'id_transaction' => $last_trans
                 );
                 $this->db->insert('mem_payments', $dbdata);
 
@@ -105,10 +117,15 @@ class Manager_model extends CI_Model {
                     'result' => 'success',
                     'val_string' => $valstr,
                     'flag' => 0,
-                    'for_year' => $cur_yr
+                    'for_year' => $cur_yr,
+                    'id_transaction' => $last_trans
                 );
                 $this->db->insert('mem_payments', $dbdata);
             }
+
+            //echo '<br><br>total: ' . $param['total'] . ' fee: ' . number_format($param['total'] * 0.029 + .3, 2, '.', ',') ;
+            //$fmt = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
+            //echo '<br><br>total: ' . $param['total'] . ' fee: ' . floatval(number_format($param['total'] * 0.029 + .3, 2));
             
             $to      = 'jkulisek.us@gmail.com, jan_kulisek@hotmail.com, mdarc-memberships@arrleb.org';
             //$to      = 'jan_kulisek@hotmail.com, jkulisek.us@gmail.com, bwhysong@gmail.com, mdarc-memberships@arrleb.org';
@@ -164,6 +181,18 @@ class Manager_model extends CI_Model {
         $this->db->where('id_payaction', 16);
         $res = $this->db->get('payactions')->row();
         $retarr['student_amt'] = $res->amount;
+
+        $this->db->reset_query();
+        $this->db->select('amount');
+        $this->db->where('id_payaction', 17);
+        $res = $this->db->get('payactions')->row();
+        $retarr['trans_fee'] = $res->amount;
+
+        $this->db->reset_query();
+        $this->db->select('amount');
+        $this->db->where('id_payaction', 18);
+        $res = $this->db->get('payactions')->row();
+        $retarr['trans_per'] = $res->amount;
 
         return $retarr;
     }

@@ -130,6 +130,13 @@ class Mdarc extends CI_Controller {
 			else {
 				$param['donation'] = 0;
 			}
+
+			if($this->input->post('don_rep') == 'don_rep') {
+				$param['don_rep'] = $this->input->post('donrep');
+			}
+			else {
+				$param['don_rep'] = 0;
+			}
 			
 			$param['student'] = $student; 
 				try {

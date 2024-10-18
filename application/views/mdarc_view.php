@@ -11,7 +11,7 @@
 <ol class="breadcrumb text-center">
   <li class="active"><a href="<?php echo base_url(); ?>index.php/mdarc">Home</a></li>
   <li><a href="https://www.mdarc.org" target="_blank">MDARC</a></li>
-  <li><a href="https://mdarc-dev.jlkconsulting.info" target="_blank">Memberships</a></li>
+  <li><a href="https://mdarc-dev.jlkconsulting.info">Memberships</a></li>
   <li><a href="<?php echo base_url();?>index.php/about" target="_blank">About</a></li>
 </ol>
 <div class="container">
@@ -82,20 +82,16 @@
                         </div>
 
                         <div class='form-row row'>
-                            <div class='col-xs-4 form-group'>
+                            <div class='col-xs-1'>&nbsp;</div>
+                            <div class='col-xs-5 form-group'>
                                 <label class='control-label'>Membership</label> 
                                 <input type="checkbox" id="mem" name="mem" value="mem" onclick="set_pay(45, <?php echo $carrier; ?>)" checked>
                                 <input class='form-control' size='4' type='text' id="memamount" name="memamount" value="$<?php echo $membership; ?>.00" disabled>
                             </div>
-                            <div class='col-xs-4 form-group'>
+                            <div class='col-xs-5 form-group'>
                                 <label class='control-label'>The Carrier $(<?php echo $carrier; ?>.00)</label> 
                                 <input type="checkbox" id="carrier" name="carrier" value="carrier" onclick="set_pay(45, <?php echo $carrier; ?>)">
                                 <input class='form-control' size='4' type='text' id="carramnt" name="carramnt" value="$0.00" disabled>
-                            </div>
-                            <div class='col-xs-4 form-group'>
-                                <label class='control-label'>Donation</label> 
-                                <input type="checkbox" id="donation" name="donation" value="donation" onclick="set_pay(45, <?php echo $carrier; ?>)" disabled>
-                                <input class='form-control' size='4' type='text' id="donamnt" name="donamnt" value="$0.00" onclick="en_check()" onfocus="this.select();">
                             </div>
                         </div>
                         <div class='row'>
@@ -103,6 +99,20 @@
                             <div class='col-xs-10'>(The $18.00 is for The Carrier hardcopy via USPS)</div>
                             
                         </div>
+                        <div class="form-row row" style="padding-top: 10px;">
+                            <div class="col-xs-1">&nbsp;</div>
+                            <div class='col-xs-5 form-group'>
+                                <label class='control-label'>Donation MDARC</label> 
+                                <input type="checkbox" id="donation" name="donation" value="donation" onclick="set_pay(45, <?php echo $carrier; ?>)" disabled>
+                                <input class='form-control' size='4' type='text' id="donamnt" name="donamnt" value="$0.00" onclick="en_check()" onfocus="this.select();">
+                            </div>
+                            <div class='col-xs-5 form-group'>
+                            <label class='control-label'>Donation Repeater</label> 
+                                <input type="checkbox" id="don_rep" name="don_rep" value="don_rep" onclick="set_pay(45, <?php echo $carrier; ?>)" disabled>
+                                <input class='form-control' size='4' type='text' id="repamnt" name="repamnt" value="$0.00" onclick="en_check_rep()" onfocus="this.select();">
+                            </div>
+                        </div>
+
                         <div class="row">&nbsp;</div>
                         <div class='form-row row'>
                             <div class='col-xs-12 form-group card required'>
@@ -124,6 +134,7 @@
                                 <input class='form-control card-expiry-year' placeholder='YYYY' size='4' type='text'>
                                 <input type='hidden' id='proc_total' name='proc_total' value = '45'>
                                 <input type='hidden' id='don_val' name='don_val' value = '' >
+                                <input type='hidden' id='don_rep_val' name='don_rep_val' value = '' >
                                 
                                 <input type='hidden' id='car_val' name='car_val' value = <?php echo $carrier; ?> >
                             </div>
