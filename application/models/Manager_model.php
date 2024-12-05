@@ -17,6 +17,7 @@ class Manager_model extends CI_Model {
 		
 		$mail->isSMTP();
         $mail->SMTPAuth = true;
+        $mail->Username = 'apikey';
     }
 
     public function get_paydata() {
