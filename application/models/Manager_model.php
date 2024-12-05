@@ -6,6 +6,33 @@ class Manager_model extends CI_Model {
 		$this->load->database();
 	}
 
+	public function check_email($email) {
+        $retval = true;
+        $this->db->select('email');
+        $this->db->where('email', $email);
+        $this->db->from('tMembers');
+        if($this->db->count_all_results() == 0) $retval = false;
+
+        return $retval;
+    }
+
+    public function get_member($email) {
+        $this->db->select('*');
+        $this->db->where('email', $email);
+        $res = $this->db->get('tMembers')->row();
+        $retarr['id_members'] = $res->id_members;
+        $retarr['fname'] = $res->fname;
+        $retarr['lname'] = $res->lname;
+        $retarr['callsign'] = $res->callsign;
+        $retarr['email'] = $email;
+        $retarr['cur_year'] = $res->cur_year;
+        $retarr['line1'] = $res->address;
+        $retarr['city'] = $res->city;
+        $retarr['state'] = $res->state;
+        $retarr['postal_code'] = $res->zip;
+        return $retarr;
+    }
+
 	public function check_student($email) {
         $retval = false;
 
