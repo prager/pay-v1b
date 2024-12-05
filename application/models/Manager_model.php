@@ -5,6 +5,11 @@ class Manager_model extends CI_Model {
 		parent::__construct();
 		$this->load->database();
 	}
+
+    private function send_email($email) {
+
+    }
+    
     public function get_paydata() {
         $retarr = array();
         $this->db->select('amount');
