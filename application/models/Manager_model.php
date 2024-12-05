@@ -16,6 +16,7 @@ class Manager_model extends CI_Model {
         // $mail->Password = 'CKPrb56yg!4Q$vC';
 		
 		$mail->isSMTP();
+        $mail->SMTPAuth = true;
     }
 
     public function get_paydata() {
