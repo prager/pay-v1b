@@ -5,6 +5,39 @@ class Manager_model extends CI_Model {
 		parent::__construct();
 		$this->load->database();
 	}
+    public function get_paydata() {
+        $retarr = array();
+        $this->db->select('amount');
+        $this->db->where('id_payaction', 1);
+        $res = $this->db->get('payactions')->row();
+        $retarr['membership'] = $res->amount;
+
+        $this->db->reset_query();
+        $this->db->select('amount');
+        $this->db->where('id_payaction', 10);
+        $res = $this->db->get('payactions')->row();
+        $retarr['carrier'] = $res->amount;
+
+        $this->db->reset_query();
+        $this->db->select('amount');
+        $this->db->where('id_payaction', 16);
+        $res = $this->db->get('payactions')->row();
+        $retarr['student_amt'] = $res->amount;
+
+        $this->db->reset_query();
+        $this->db->select('amount');
+        $this->db->where('id_payaction', 17);
+        $res = $this->db->get('payactions')->row();
+        $retarr['trans_fee'] = $res->amount;
+
+        $this->db->reset_query();
+        $this->db->select('amount');
+        $this->db->where('id_payaction', 18);
+        $res = $this->db->get('payactions')->row();
+        $retarr['trans_per'] = $res->amount;
+
+        return $retarr;
+    }
 
 	public function check_email($email) {
         $retval = true;
