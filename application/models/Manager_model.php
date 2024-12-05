@@ -7,9 +7,17 @@ class Manager_model extends CI_Model {
 	}
 
     private function send_email($email) {
-
+        $mail = $this->phpmailer_lib->load();
+        
+        // SMTP configuration
+        // $mail->Host     = 'smtp.ionos.com';
+        // $mail->SMTPAuth = true;
+        // $mail->Username = 'mdarc-memberships@arrleb.org';
+        // $mail->Password = 'CKPrb56yg!4Q$vC';
+		
+		$mail->isSMTP();
     }
-    
+
     public function get_paydata() {
         $retarr = array();
         $this->db->select('amount');
