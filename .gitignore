@@ -19,3 +19,4 @@ application/logs/*
 application/config/config.php
 application/config/database.php
 .vscode/sftp.json
+.codegpt

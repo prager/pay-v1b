@@ -205,4 +205,14 @@
 </body> 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script src="<?php echo base_url() ;?>/assets/js/main.js"></script>
+<script>
+    const button = document.getElementById('btnsubmit');
+ 
+    button.addEventListener('click', function(event) {
+        //alert('Payment is being submitted! Thank you!')
+		setTimeout(function () { 
+            event.target.disabled = true;
+        }, 0); 
+    });
+</script>
 </html>

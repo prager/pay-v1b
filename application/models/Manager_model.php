@@ -148,9 +148,9 @@ class Manager_model extends CI_Model {
                 $this->db->insert('mem_payments', $dbdata);
             }
 
-            //$email['to'] = array('jkulisek.us@gmail.com', 'jan_kulisek@hotmail.com', 'mdarc-memberships@arrleb.org');
-			$email['to'] = array('jkulisek.us@gmail.com', 'bwhysong@gmail.com', 'mdarc-memberships@arrleb.org');
-			$email['subject'] = 'MDARC Payment';
+            //$email['to'] = array('jkulisek.us@gmail.com', 'mdarc-memberships@arrleb.org');
+			$email['to'] = array('bwhysong@gmail.com', 'mdarc-memberships@arrleb.org');
+			$email['subject'] = 'MDARC Payment ' . $mem_arr['fname'] . ' ' . $mem_arr['lname'];
 			$email['message'] = '<h2>Payment to Stripe Account Completed</h2>
 								<p>Payment date: '. date('F j, Y, g:i a', $time_stamp) . '<br>
 								Payment for MDARC member: ' .  $mem_arr['fname'] . " ". $mem_arr['lname'] . '<br>

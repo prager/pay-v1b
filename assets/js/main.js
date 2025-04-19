@@ -79,6 +79,10 @@ function en_check_rep() {
   document.getElementById("don_rep").disabled = false;
 }
 
+function submitted() {
+  document.getElementById("btnsubmit").disabled = true;
+}
+
 $(function () {
   var $form = $(".require-validation");
   $("form.require-validation").bind("submit", function (e) {
